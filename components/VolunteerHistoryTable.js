@@ -1,21 +1,26 @@
 // components/VolunteerHistoryTable.js
 import React, { useEffect, useState } from 'react';
-import userService from '../services/userService';
+import axios from 'axios';
+import styles from '../styles/VolunteerHistoryTable.module.css';
 
 const VolunteerHistoryTable = () => {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    // Fetch volunteer history
     const fetchHistory = async () => {
-      const data = await userService.getVolunteerHistory();
-      setHistory(data);
+      try {
+        const response = await axios.get('/api/history');
+        setHistory(response.data);
+      } catch (error) {
+        console.error('Error fetching history:', error);
+      }
     };
+
     fetchHistory();
   }, []);
 
   return (
-    <table>
+    <table className={styles.table}>
       <thead>
         <tr>
           <th>Event Name</th>
